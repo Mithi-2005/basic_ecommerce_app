@@ -1,21 +1,19 @@
-const users = require('../models/user.model');
+const User = require('../models/user.model');
 
-function getAllUsers() {
-  return users;
+async function getAllUsers() {
+  return await User.find();
 }
 
-function createUser(name, email) {
-  const newUser = {
-    id: users.length + 1,
+async function createUser(name, email) {
+  const newUser = new User({
     name: name,
     email: email
-  };
-  users.push(newUser);
-  return newUser;
+  });
+  return await newUser.save();
 }
 
-function findUserById(id) {
-  return users.find(u => u.id === parseInt(id));
+async function findUserById(id) {
+  return await User.findById(id);
 }
 
 module.exports = {

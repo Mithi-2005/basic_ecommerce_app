@@ -1,21 +1,19 @@
-const products = require('../models/product.model');
+const Product = require('../models/product.model');
 
-function getAllProducts() {
-  return products;
+async function getAllProducts() {
+  return await Product.find();
 }
 
-function createProduct(name, price) {
-  const newProduct = {
-    id: products.length + 1,
+async function createProduct(name, price) {
+  const newProduct = new Product({
     name: name,
-    price: parseFloat(price)
-  };
-  products.push(newProduct);
-  return newProduct;
+    price: price
+  });
+  return await newProduct.save();
 }
 
-function findProductById(id) {
-  return products.find(p => p.id === parseInt(id));
+async function findProductById(id) {
+  return await Product.findById(id);
 }
 
 module.exports = {

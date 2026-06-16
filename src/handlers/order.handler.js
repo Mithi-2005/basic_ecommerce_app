@@ -1,11 +1,15 @@
 const orderService = require('../services/order.service');
 
-function getOrders(req, res) {
-  const orders = orderService.getAllOrders();
-  res.json(orders);
+async function getOrders(req, res) {
+  try {
+    const orders = await orderService.getAllOrders();
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
-function createOrder(req, res) {
+async function createOrder(req, res) {
   const { userId, items } = req.body;
 
   if (!userId || !items || !Array.isArray(items) || items.length === 0) {
@@ -13,7 +17,7 @@ function createOrder(req, res) {
   }
 
   try {
-    const newOrder = orderService.createOrder(userId, items);
+    const newOrder = await orderService.createOrder(userId, items);
     res.status(201).json(newOrder);
   } catch (error) {
     res.status(400).json({ error: error.message });

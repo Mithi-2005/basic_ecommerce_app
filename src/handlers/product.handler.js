@@ -1,11 +1,15 @@
 const productService = require('../services/product.service');
 
-function getProducts(req, res) {
-  const products = productService.getAllProducts();
-  res.json(products);
+async function getProducts(req, res) {
+  try {
+    const products = await productService.getAllProducts();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
-function createProduct(req, res) {
+async function createProduct(req, res) {
   const { name, price } = req.body;
 
   if (!name || price === undefined) {
@@ -17,8 +21,12 @@ function createProduct(req, res) {
     return res.status(400).json({ error: "Price must be a positive number" });
   }
 
-  const newProduct = productService.createProduct(name, numericPrice);
-  res.status(201).json(newProduct);
+  try {
+    const newProduct = await productService.createProduct(name, numericPrice);
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
 module.exports = {

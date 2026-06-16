@@ -1,13 +1,13 @@
-const orders = require('../models/order.model');
+const Order = require('../models/order.model');
 const userService = require('./user.service');
 const productService = require('./product.service');
 
-function getAllOrders() {
-  return orders;
+async function getAllOrders() {
+  return await Order.find();
 }
 
-function createOrder(userId, items) {
-  const user = userService.findUserById(userId);
+async function createOrder(userId, items) {
+  const user = await userService.findUserById(userId);
   if (!user) {
     throw new Error("User not found");
   }
@@ -16,7 +16,7 @@ function createOrder(userId, items) {
   const orderItems = [];
 
   for (let item of items) {
-    const product = productService.findProductById(item.productId);
+    const product = await productService.findProductById(item.productId);
     if (!product) {
       throw new Error("Product with ID " + item.productId + " not found");
     }
@@ -26,23 +26,20 @@ function createOrder(userId, items) {
     totalPrice += priceAtPurchase * quantity;
 
     orderItems.push({
-      productId: product.id,
+      productId: product._id,
       name: product.name,
       price: priceAtPurchase,
       quantity: quantity
     });
   }
 
-  const newOrder = {
-    id: orders.length + 1,
-    userId: parseInt(userId),
+  const newOrder = new Order({
+    userId: user._id,
     items: orderItems,
-    totalPrice: parseFloat(totalPrice.toFixed(2)),
-    createdAt: new Date().toISOString()
-  };
+    totalPrice: parseFloat(totalPrice.toFixed(2))
+  });
 
-  orders.push(newOrder);
-  return newOrder;
+  return await newOrder.save();
 }
 
 module.exports = {

@@ -1,7 +1,8 @@
-const products = [
-  { id: 1, name: "Laptop", price: 999.99 },
-  { id: 2, name: "Smartphone", price: 499.99 },
-  { id: 3, name: "Headphones", price: 79.99 }
-];
+const mongoose = require('mongoose');
 
-module.exports = products;
+const productSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  price: { type: Number, required: true }
+});
+
+module.exports = mongoose.model('Product', productSchema);

@@ -1,6 +1,8 @@
-const users = [
-  { id: 1, name: "Alice Johnson", email: "alice@example.com" },
-  { id: 2, name: "Bob Smith", email: "bob@example.com" }
-];
+const mongoose = require('mongoose');
 
-module.exports = users;
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true }
+});
+
+module.exports = mongoose.model('User', userSchema);

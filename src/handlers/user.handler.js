@@ -1,19 +1,27 @@
 const userService = require('../services/user.service');
 
-function getUsers(req, res) {
-  const users = userService.getAllUsers();
-  res.json(users);
+async function getUsers(req, res) {
+  try {
+    const users = await userService.getAllUsers();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
-function createUser(req, res) {
+async function createUser(req, res) {
   const { name, email } = req.body;
 
   if (!name || !email) {
     return res.status(400).json({ error: "Name and email are required" });
   }
 
-  const newUser = userService.createUser(name, email);
-  res.status(201).json(newUser);
+  try {
+    const newUser = await userService.createUser(name, email);
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
 module.exports = {
