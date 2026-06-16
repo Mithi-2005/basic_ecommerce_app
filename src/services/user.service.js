@@ -16,8 +16,18 @@ async function findUserById(id) {
   return await User.findById(id);
 }
 
+async function updateUser(id, data) {
+  return await User.findByIdAndUpdate(id, data, { new: true });
+}
+
+async function deleteUser(id) {
+  return await User.findByIdAndDelete(id);
+}
+
 module.exports = {
   getAllUsers,
   createUser,
-  findUserById
+  findUserById,
+  updateUser,
+  deleteUser
 };

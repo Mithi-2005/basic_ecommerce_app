@@ -16,8 +16,18 @@ async function findProductById(id) {
   return await Product.findById(id);
 }
 
+async function updateProduct(id, data) {
+  return await Product.findByIdAndUpdate(id, data, { new: true });
+}
+
+async function deleteProduct(id) {
+  return await Product.findByIdAndDelete(id);
+}
+
 module.exports = {
   getAllProducts,
   createProduct,
-  findProductById
+  findProductById,
+  updateProduct,
+  deleteProduct
 };

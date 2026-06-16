@@ -29,7 +29,46 @@ async function createProduct(req, res) {
   }
 }
 
+async function getProductById(req, res) {
+  try {
+    const product = await productService.findProductById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function updateProduct(req, res) {
+  try {
+    const updatedProduct = await productService.updateProduct(req.params.id, req.body);
+    if (!updatedProduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json(updatedProduct);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function deleteProduct(req, res) {
+  try {
+    const deletedProduct = await productService.deleteProduct(req.params.id);
+    if (!deletedProduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json({ message: "Product deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   getProducts,
-  createProduct
+  createProduct,
+  getProductById,
+  updateProduct,
+  deleteProduct
 };

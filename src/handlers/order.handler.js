@@ -24,7 +24,46 @@ async function createOrder(req, res) {
   }
 }
 
+async function getOrderById(req, res) {
+  try {
+    const order = await orderService.findOrderById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function updateOrder(req, res) {
+  try {
+    const updatedOrder = await orderService.updateOrder(req.params.id, req.body);
+    if (!updatedOrder) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+    res.json(updatedOrder);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+async function deleteOrder(req, res) {
+  try {
+    const deletedOrder = await orderService.deleteOrder(req.params.id);
+    if (!deletedOrder) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+    res.json({ message: "Order deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   getOrders,
-  createOrder
+  createOrder,
+  getOrderById,
+  updateOrder,
+  deleteOrder
 };

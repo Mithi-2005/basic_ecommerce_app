@@ -24,7 +24,46 @@ async function createUser(req, res) {
   }
 }
 
+async function getUserById(req, res) {
+  try {
+    const user = await userService.findUserById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function updateUser(req, res) {
+  try {
+    const updatedUser = await userService.updateUser(req.params.id, req.body);
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function deleteUser(req, res) {
+  try {
+    const deletedUser = await userService.deleteUser(req.params.id);
+    if (!deletedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   getUsers,
-  createUser
+  createUser,
+  getUserById,
+  updateUser,
+  deleteUser
 };
